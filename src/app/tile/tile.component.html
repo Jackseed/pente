@@ -1,13 +1,12 @@
 <div id="outPopUp">
-<mat-grid-list cols="19" rowHeight="1:1">
-  <mat-grid-tile
-    *ngFor="let row of arrayOne(361); let i = index;"
-    [colspan]=1
-    [rowspan]=1
-    [style.background]="tile[i].color">
-    <button (click)="play(i)" mat-button> {{i}}  </button>
+  <mat-grid-list cols="19" rowHeight="1:1">
+    <mat-grid-tile
+      *ngFor="let row of arrayOne(361); let i = index;"
+      [colspan]=1
+      [rowspan]=1
+      [style.background]="tile[i].color">
+      <button (click)="play(i)" mat-button> {{i}}  </button>
 
-  </mat-grid-tile>
-
-</mat-grid-list>
+    </mat-grid-tile>
+  </mat-grid-list>
 </div>
