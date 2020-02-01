@@ -40,6 +40,7 @@ export class TileComponent implements OnInit {
           this.neighbour2 = i + 2 * (x + 19 * y);
           this.neighbour3 = i + 3 * (x + 19 * y);
           console.log(this.neighbour3);
+          console.log(this.neighbour3);
           if (
             this.tile[this.neighbour1].color === this.passivePlayer
             && this.tile[this.neighbour2].color === this.passivePlayer
