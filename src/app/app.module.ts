@@ -28,7 +28,6 @@ const firebaseConfig = {
     AppComponent,
     TileComponent,
     UserProfileComponent,
-    LoginComponent,
   ],
   imports: [
     BrowserModule,
