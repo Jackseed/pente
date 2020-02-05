@@ -7,7 +7,8 @@ export interface Tile {
 }
 export interface Player {
   color: string;
-  score: number;
+  scoreCapture: number;
+  scoreVictory: number;
 }
 
 @Component({
@@ -19,11 +20,13 @@ export class TileComponent implements OnInit {
   tile: Tile[] = [];
   whitePlayer: Player = {
     color: 'white',
-    score: 0,
+    scoreCapture: 0,
+    scoreVictory: 0,
   };
     blackPlayer: Player = {
     color: 'black',
-    score: 0,
+    scoreCapture: 0,
+    scoreVictory: 0,
   };
   activePlayer = 'black';
   passivePlayer = 'white';
@@ -31,6 +34,8 @@ export class TileComponent implements OnInit {
   neighbour2: number;
   neighbour3: number;
   neighbour4: number;
+  victory = false;
+
   ngOnInit() {
     for (let i = 0; i < 361; i++) {
       this.tile[i] = {color: 'grey'};
@@ -69,9 +74,9 @@ export class TileComponent implements OnInit {
                 this.tile[this.neighbour1].color = 'grey';
                 this.tile[this.neighbour2].color = 'grey';
                 if (this.activePlayer === 'black') {
-                  this.blackPlayer.score = this.blackPlayer.score + 2;
+                  this.blackPlayer.scoreCapture = this.blackPlayer.scoreCapture + 2;
                 } else {
-                  this.whitePlayer.score = this.whitePlayer.score + 2;
+                  this.whitePlayer.scoreCapture = this.whitePlayer.scoreCapture + 2;
                 }
             }
         } else {
@@ -104,8 +109,14 @@ export class TileComponent implements OnInit {
     let ny: number;
     let counter: number;
 
-    if (this.whitePlayer.score === 10 || this.blackPlayer.score === 10) {
+    if (this.whitePlayer.scoreCapture === 10 || this.blackPlayer.scoreCapture === 10) {
+      this.victory = true;
       console.log('Victory for '.concat(this.activePlayer));
+      if (this.whitePlayer.color === this.activePlayer) {
+        this.whitePlayer.scoreVictory++;
+      } else {
+        this.blackPlayer.scoreVictory++;
+      }
     }
 
     for (x = -1; x <= 1; x++) {
@@ -121,37 +132,31 @@ export class TileComponent implements OnInit {
           counter = 0;
 
           while (this.sameColorCheck(i, px, py) === true) {
-
             i = i + px + 19 * py;
             counter++;
-
           }
-
           while (this.sameColorCheck(i, nx, ny) === true) {
             nx = nx - x;
             ny = ny - y;
             counter++;
-            console.LOG('salut');
-            
-
           }
-
-
-
           if (counter >= 7) {
+            this.victory = true;
             console.log('Victory for '.concat(this.activePlayer));
+            if (this.whitePlayer.color === this.activePlayer) {
+              this.whitePlayer.scoreVictory++;
+            } else {
+              this.blackPlayer.scoreVictory++;
+            }
           }
         }
-
-
-
       }
     }
   }
 
 
   play(i: number) {
-    if (this.tile[i].color !== 'grey') {
+    if (this.tile[i].color !== 'grey' || this.victory) {
       return;
     } else {
       this.tile[i].color = this.activePlayer;
