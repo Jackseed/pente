@@ -11,8 +11,9 @@
       *ngFor="let row of arrayOne(361); let i = index;"
       [colspan]=1
       [rowspan]=1
-      [style.background]="tile[i].color">
-      <button (click)="play(i)" mat-button> {{i}}  </button>
+      [style.background]="tile[i].color"
+      >
+      <button (click)="play(i)" mat-button style="width: 20px; height: 20px;"></button>
     </mat-grid-tile>
   </mat-grid-list>
 </div>
