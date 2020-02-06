@@ -12,6 +12,7 @@ const routes: Routes = [
   {
     path: 'game',
     component: TileComponent,
+    canActivate: [AuthGuard],
     data: { title: 'Pente Game' }
   },
   { path: '',

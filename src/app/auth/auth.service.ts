@@ -32,9 +32,9 @@ export class AuthService {
     })
   );
   }
-  async googleSignin() {
-    const provider = new auth.GoogleAuthProvider();
-    const credential = await this.afAuth.auth.signInWithPopup(provider);
+  async anonymousLogin() {
+    const credential = await this.afAuth.auth.signInAnonymously();
+    this.router.navigate(['/play']);
     return this.updateUserData(credential.user);
   }
 
