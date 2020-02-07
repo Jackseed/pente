@@ -11,12 +11,12 @@ const routes: Routes = [
   { path: 'play', component: TileComponent,  canActivate: [AuthGuard] },
   {
     path: 'game',
-    component: TileComponent,
-    canActivate: [AuthGuard],
-    data: { title: 'Pente Game' }
+    loadChildren: () =>
+      import('./game/game.module').then(m => m.GameModule),
+      canActivate: [AuthGuard],
   },
   { path: '',
-  redirectTo: '/game',
+  redirectTo: '/play',
   pathMatch: 'full'
   },
 ];
