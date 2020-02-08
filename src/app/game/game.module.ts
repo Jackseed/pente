@@ -6,13 +6,17 @@ import { CreateButtonComponent } from './create-button/create-button.component';
 import {MatIconModule} from '@angular/material/icon';
 import { GameComponent } from './game/game.component';
 import { GameListComponent } from './game-list/game-list.component';
+import {MatGridListModule} from '@angular/material/grid-list';
+import {MatButtonModule} from '@angular/material/button';
 
 @NgModule({
   declarations: [CreateButtonComponent, GameComponent, GameListComponent],
   imports: [
     CommonModule,
     GameRoutingModule,
-    MatIconModule
+    MatIconModule,
+    MatGridListModule,
+    MatButtonModule
   ]
 })
 export class GameModule { }

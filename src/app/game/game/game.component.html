@@ -1,3 +1,23 @@
 <p>game works!{{game.id}}
 </p>
+<div *ngIf="victory" class="center">
+  <h2>Victory for {{passivePlayer}}</h2>
+</div>
+<div class="center">
+  <h2>Score: Black: {{blackPlayer.scoreVictory}} | White: {{whitePlayer.scoreVictory}}</h2>
+  <h2>Captures: Black: {{blackPlayer.scoreCapture}} | White: {{whitePlayer.scoreCapture}}</h2>
+</div>
+<div id="outPopUp">
+  <mat-grid-list cols="19" rowHeight="1:1">
+    <mat-grid-tile
+      *ngFor="let tile of game.tiles; let i = index;"
+      [colspan]=1
+      [rowspan]=1
+      [style.background]="game.tiles[i].color"
+      >
+      <button (click)="play(i)" mat-button style="width: 20px; height: 20px;"></button>
+    </mat-grid-tile>
+  </mat-grid-list>
+</div>
+
 <button (click)="goBack()">go back</button>

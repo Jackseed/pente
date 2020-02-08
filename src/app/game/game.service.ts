@@ -30,6 +30,7 @@ export class GameService {
         tiles.push({
           x: j,
           y: i,
+          color: 'grey',
         });
       }
     }
