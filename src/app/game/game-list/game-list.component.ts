@@ -19,6 +19,7 @@ export class GameListComponent implements OnInit, OnDestroy {
     this.sub = this.gameService
     .getGames()
     .subscribe(games => (this.games = games));
+    console.log(this.games[0].id);
   }
 
   ngOnDestroy() {

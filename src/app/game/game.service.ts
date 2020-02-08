@@ -21,7 +21,8 @@ export class GameService {
   /**
    * Creates a new game for the current user
    */
-  async createNewGame(data: Game) {
+  async createNewGame() {
+    const id = this.db.createId();
     const user = await this.afAuth.auth.currentUser;
     const tiles: Tile[] = [];
     for (let i = 0; i < 19; i++) {
@@ -33,7 +34,7 @@ export class GameService {
       }
     }
     return this.db.collection('games').add({
-      ...data,
+      id,
       players: [{
         userId: user.uid,
         isActive: false,
@@ -41,7 +42,7 @@ export class GameService {
         scoreCapture: 0,
         scoreVictory: 0
       }],
-      tiles: {tiles},
+      tiles,
     });
   }
 

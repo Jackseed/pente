@@ -13,6 +13,7 @@ import { Subscription } from 'rxjs';
 export class GameComponent implements OnInit {
   game: Game;
   sub: Subscription;
+
   constructor(
     private route: ActivatedRoute,
     private gameService: GameService,
@@ -23,14 +24,13 @@ export class GameComponent implements OnInit {
     this.getGame();
   }
 
-  getGame(): void {
+  private async getGame() {
     const id = this.route.snapshot.paramMap.get('id');
-    this.sub = this.gameService.getGame(id)
-      .subscribe(game => this.game = game);
+    this.game = await this.gameService.getGame(id);
+    console.log(this.game.id);
   }
 
   goBack(): void {
     this.location.back();
   }
-
 }

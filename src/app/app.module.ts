@@ -12,6 +12,9 @@ import { AngularFireAuthModule } from '@angular/fire/auth';
 import { UserProfileComponent } from './user-profile/user-profile.component';
 import { LoginComponent } from './login/login.component';
 import { AuthGuard } from './auth/auth.guard';
+import { GameComponent } from './game/game/game.component';
+import { GameListComponent } from './game/game-list/game-list.component';
+import {MatIconModule} from '@angular/material/icon';
 
 const firebaseConfig = {
   apiKey: 'AIzaSyD8cItYsuOobtu8nsJBQU6_bQWEmQFaiv0',
@@ -28,7 +31,9 @@ const firebaseConfig = {
     AppComponent,
     TileComponent,
     UserProfileComponent,
-    LoginComponent
+    LoginComponent,
+    GameComponent,
+    GameListComponent,
   ],
   imports: [
     BrowserModule,
@@ -39,6 +44,7 @@ const firebaseConfig = {
     AngularFireModule.initializeApp(firebaseConfig),
     AngularFirestoreModule,
     AngularFireAuthModule,
+    MatIconModule
   ],
   providers: [AuthGuard],
   bootstrap: [AppComponent],
