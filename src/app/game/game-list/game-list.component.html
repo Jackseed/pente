@@ -1,0 +1,16 @@
+<p>game-list works!</p>
+
+<div *ngFor="let game of games" (click)="joinGame(game)">
+  {{game.name}}
+</div>
+
+<button
+  mat-button
+  color='primary'
+  (click)='createNewGame()'
+>
+  <mat-icon>create</mat-icon>
+  <span>Create</span>
+</button>
+
+

@@ -2,8 +2,10 @@ import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
 import * as firebase from 'firebase/app';
-import { switchMap, map } from 'rxjs/operators';
-import { Tile, Player, Game } from './game.model';
+import { switchMap } from 'rxjs/operators';
+import { Tile, Player, Game, createGame } from './game.model';
+import { Router } from '@angular/router';
+import { Observable } from 'rxjs/internal/Observable';
 
 @Injectable({
   providedIn: 'root'
@@ -13,12 +15,13 @@ export class GameService {
   constructor(
     private afAuth: AngularFireAuth,
     private db: AngularFirestore,
+    private router: Router,
   ) { }
 
   /**
    * Creates a new game for the current user
    */
-  async createGame(data: Game) {
+  async createNewGame(data: Game) {
     const user = await this.afAuth.auth.currentUser;
     const tiles: Tile[] = [];
     for (let i = 0; i < 19; i++) {
@@ -55,7 +58,7 @@ export class GameService {
   /**
    * Add a player to the game
    */
-  addPlayer(gameId: string, player: Player[]) {
+  addPlayer(gameId: string, player: Player) {
     return this.db
       .collection('games')
       .doc(gameId)
@@ -72,5 +75,48 @@ export class GameService {
       .update({
         players: firebase.firestore.FieldValue.arrayRemove(player)
       });
+  }
+
+  /**
+   * Get the game list
+   */
+  getGames() {
+    return this.afAuth.authState.pipe(
+      switchMap(user => {
+        if (user) {
+          return this.db.collection<Game>('games', ref =>
+          ref.orderBy('name')
+          ).valueChanges({idField: 'id'});
+        } else {
+          return [];
+        }
+      })
+    );
+  }
+  /**
+   * Get a game by id
+   */
+
+  public async getGame(id: string): Promise<Game> {
+    const gameSnapShot = await this.db
+    .collection('games').doc(id)
+      .get().toPromise();
+    return createGame(gameSnapShot.data());
+  }
+
+  /**
+   * Join a player to a game
+   */
+  async joinGame(game) {
+    const user = await this.afAuth.auth.currentUser;
+    const player = {
+      userId: user.uid,
+      isActive: false,
+      color: 'black',
+      scoreCapture: 0,
+      scoreVictory: 0
+    } as Player;
+    this.addPlayer(game.id, player);
+    this.router.navigate(['/game/{{game.id}}']);
   }
 }

@@ -4,6 +4,7 @@ import { TileComponent } from './tile/tile.component';
 import { AuthGuard } from './auth/auth.guard';
 import { UserProfileComponent } from './user-profile/user-profile.component';
 import { LoginComponent } from './login/login.component';
+import { GameComponent } from './game/game/game.component';
 
 
 const routes: Routes = [
@@ -15,6 +16,7 @@ const routes: Routes = [
       import('./game/game.module').then(m => m.GameModule),
       canActivate: [AuthGuard],
   },
+  { path: 'game/:id', component: GameComponent },
   { path: '',
   redirectTo: '/play',
   pathMatch: 'full'

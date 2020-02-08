@@ -18,3 +18,13 @@ export interface Game {
   tiles?: Tile[];
   players?: Player[];
 }
+/** A factory function that creates Game */
+export function createGame(params: Partial<Game> = {}): Game {
+  return {
+    id: params.id,
+    name: params.name,
+    tiles: params.tiles,
+    players: params.players,
+    ...params
+  };
+}
