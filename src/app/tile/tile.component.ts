@@ -4,6 +4,8 @@ import {MatButtonModule} from '@angular/material/button';
 
 export interface Tile {
   color: string;
+  x: number;
+  y: number;
 }
 export interface Player {
   color: string;
@@ -38,8 +40,14 @@ export class TileComponent implements OnInit {
 
   ngOnInit() {
     for (let i = 0; i < 361; i++) {
-      this.tile[i] = {color: 'grey'};
+      this.tile[i] = {
+        color: 'grey',
+        x: i % 19,
+        y: 18 - Math.floor(i / 19)
+    };
     }
+    console.log(this.tile[32].x);
+    console.log(this.tile[32].y);
   }
 
   arrayOne(n: number): any[] {
