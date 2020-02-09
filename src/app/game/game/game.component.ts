@@ -14,16 +14,8 @@ export class GameComponent implements OnInit {
   game: Game;
   sub: Subscription;
   tiles: Tile[] = [];
-  whitePlayer: Player = {
-    color: 'white',
-    scoreCapture: 0,
-    scoreVictory: 0,
-  };
-    blackPlayer: Player = {
-    color: 'black',
-    scoreCapture: 0,
-    scoreVictory: 0,
-  };
+  whitePlayer: Player;
+  blackPlayer: Player;
   activePlayer = 'black';
   passivePlayer = 'white';
   neighbour1: number;
@@ -45,15 +37,12 @@ export class GameComponent implements OnInit {
   private async getGame() {
     const id = this.route.snapshot.paramMap.get('id');
     this.game = await this.gameService.getGame(id);
-    console.log(this.game.tiles);
+    this.whitePlayer = this.game.players[0];
+    console.log(this.whitePlayer);
   }
 
   goBack(): void {
     this.location.back();
-  }
-
-  arrayOne(n: number): any[] {
-    return Array(n);
   }
 
   checkCapture(i: number) {
