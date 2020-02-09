@@ -38,7 +38,7 @@ export class GameComponent implements OnInit {
     const id = this.route.snapshot.paramMap.get('id');
     this.game = await this.gameService.getGame(id);
     this.whitePlayer = this.game.players[0];
-    console.log(this.whitePlayer);
+    console.log(this.whitePlayer, this.blackPlayer);
   }
 
   goBack(): void {
@@ -155,7 +155,7 @@ export class GameComponent implements OnInit {
 
 
   play(i: number) {
-    if (this.game.tiles[i].color !== 'grey' || this.victory) {
+    if (this.game.tiles[i].color !== 'grey' || this.victory || (this.blackPlayer === undefined)) {
       return;
     } else {
       this.game.tiles[i].color = this.game.players[0].color;

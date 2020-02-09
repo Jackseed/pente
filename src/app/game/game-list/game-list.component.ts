@@ -1,33 +1,30 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
 import { Game } from '../game.model';
 import { GameService } from '../game.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-game-list',
   templateUrl: './game-list.component.html',
   styleUrls: ['./game-list.component.scss']
 })
-export class GameListComponent implements OnInit, OnDestroy {
-  games: Game[];
-  sub: Subscription;
+export class GameListComponent implements OnInit {
+  public games$: Observable<Game[]>;
+
   constructor(
     public gameService: GameService,
+    private router: Router,
   ) { }
 
   ngOnInit() {
-    this.sub = this.gameService
-    .getGames()
-    .subscribe(games => (this.games = games));
-    console.log(this.games[0].id);
+    this.games$ = this.gameService.getGames();
   }
 
-  ngOnDestroy() {
-    this.sub.unsubscribe();
-  }
-
-  createNewGame() {
-    this.gameService.createNewGame();
+  async createNewGame() {
+    const gameId = await this.gameService.createNewGame();
+    console.log(gameId);
+    this.router.navigate([`/games/${gameId}`]);
   }
 
   joinGame(game) {

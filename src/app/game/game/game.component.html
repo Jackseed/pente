@@ -2,11 +2,13 @@
 <div *ngIf="victory" class="center">
   <h2>Victory for {{passivePlayer}}</h2>
 </div>
-<div class="center" *ngIf="blackPlayer">
+<div class="center" *ngIf="blackPlayer; else waitingMessage">
   <h2>Score: Black: {{blackPlayer.scoreVictory}} | White: {{whitePlayer.scoreVictory}}</h2>
   <h2>Captures: Black: {{blackPlayer.scoreCapture}} | White: {{whitePlayer.scoreCapture}}</h2>
 </div>
-
+<ng-template #waitingMessage let-user class="center">
+  Waiting for an opponent to start.
+</ng-template>
 <div id="outPopUp" *ngIf="game; else loading">
   <mat-grid-list cols="19" rowHeight="1:1">
     <mat-grid-tile

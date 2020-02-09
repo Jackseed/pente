@@ -34,17 +34,19 @@ export class GameService {
         });
       }
     }
-    return this.db.collection('games').add({
+    const players: Player[] = [{
+      userId: user.uid,
+      isActive: false,
+      color: 'white',
+      scoreCapture: 0,
+      scoreVictory: 0
+    }];
+    this.db.collection('games').doc(id).set({
       id,
-      players: [{
-        userId: user.uid,
-        isActive: false,
-        color: 'white',
-        scoreCapture: 0,
-        scoreVictory: 0
-      }],
+      players,
       tiles,
     });
+    return id;
   }
 
   /**
@@ -83,18 +85,9 @@ export class GameService {
    * Get the game list
    */
   getGames() {
-    return this.afAuth.authState.pipe(
-      switchMap(user => {
-        if (user) {
-          return this.db.collection<Game>('games', ref =>
-          ref.orderBy('name')
-          ).valueChanges({idField: 'id'});
-        } else {
-          return [];
-        }
-      })
-    );
+    return this.db.collection('games').valueChanges();
   }
+
   /**
    * Get a game by id
    */

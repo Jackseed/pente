@@ -33,7 +33,7 @@ export class AuthService {
   }
   async anonymousLogin() {
     const credential = await this.afAuth.auth.signInAnonymously();
-    this.router.navigate(['/play']);
+    this.router.navigate(['/games']);
     return this.updateUserData(credential.user);
   }
 
