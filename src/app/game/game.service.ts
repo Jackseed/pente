@@ -39,8 +39,7 @@ export class GameService {
     // Creating tiles:
     for (let i = 0; i < 19; i++) {
       for (let j = 0; j < 19; j++) {
-          let tileId = 0;
-          tileId = (tileId + j + 19 *  +i + j);
+          const tileId = j + 19 *  i;
           const tileIdToString = tileId.toString();
           console.log(tileId, tileIdToString);
           this.db.collection('games').doc(id)
@@ -107,15 +106,15 @@ export class GameService {
    */
   public async getActualGameTiles(gameId): Promise<Tile[]> {
     const tiles: Tile[] = [];
-    for (let i = 0; i < 360; i++) {
-      const iToString = i.toString();
-      const tilesSnapShot = await  this.db.collection('games').doc(gameId)
-        .collection('tiles', ref => ref.orderBy('number')).doc(iToString)
-          .get().toPromise();
-      const tile = createTile(tilesSnapShot.data());
-      tiles.push(tile);
-      console.log(tile);
-    }
+    const tilesSnapShot = await this.db.collection('games').doc(gameId)
+      .collection('tiles', ref => ref.orderBy('number'))
+        .get().toPromise().then(querySnapshot => {
+          querySnapshot.forEach(doc => {
+            const tile = createTile(doc.data());
+            tiles.push(tile);
+            console.log(tile);
+          });
+      });
     return tiles;
   }
 

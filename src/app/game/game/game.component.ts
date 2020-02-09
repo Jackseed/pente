@@ -72,13 +72,13 @@ export class GameComponent implements OnInit {
               (this.neighbour1 >= 0 && this.neighbour1 < 361)
               && (this.neighbour2 >= 0 && this.neighbour2 < 361)
               && (this.neighbour3 >= 0 && this.neighbour3 < 361)
-              && this.game.tiles[this.neighbour1].color === this.passivePlayer
-              && this.game.tiles[this.neighbour2].color === this.passivePlayer
-              && this.game.tiles[this.neighbour3].color === this.activePlayer
+              && this.actualTiles[this.neighbour1].color === this.passivePlayer
+              && this.actualTiles[this.neighbour2].color === this.passivePlayer
+              && this.actualTiles[this.neighbour3].color === this.activePlayer
               ) {
                 // capture of the tiles
-                this.game.tiles[this.neighbour1].color = 'grey';
-                this.game.tiles[this.neighbour2].color = 'grey';
+                this.actualTiles[this.neighbour1].color = 'grey';
+                this.actualTiles[this.neighbour2].color = 'grey';
                 if (this.activePlayer === 'black') {
                   this.blackPlayer.scoreCapture = this.blackPlayer.scoreCapture + 2;
                 } else {
@@ -96,7 +96,7 @@ export class GameComponent implements OnInit {
     let t: number;
     t = i + x + 19 * y;
     if (t >= 0 && t < 360) {
-      if (this.game.tiles[i].color === this.game.tiles[t].color) {
+      if (this.actualTiles[i].color === this.actualTiles[t].color) {
         return true;
       } else {
         return false;
@@ -163,10 +163,10 @@ export class GameComponent implements OnInit {
 
   private async play(i: number) {
     this.actualTiles = await this.gameService.getActualGameTiles(this.game.id);
-    if (this.tiles$[i].color !== 'grey' || this.victory || (this.blackPlayer === undefined)) {
+    if (this.actualTiles[i].color !== 'grey' || this.victory || (this.blackPlayer === undefined)) {
       return;
     } else {
-
+      console.log(this.actualTiles);
       this.gameService.updateTile(this.game.id, i, this.activePlayer);
       this.checkCapture(i);
       this.checkVictory(i);
