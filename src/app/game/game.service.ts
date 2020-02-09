@@ -3,7 +3,7 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
 import * as firebase from 'firebase/app';
 import { switchMap } from 'rxjs/operators';
-import { Tile, Player, Game, createGame } from './game.model';
+import { Tile, Player, Game, createGame, createTile } from './game.model';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs/internal/Observable';
 
@@ -48,6 +48,7 @@ export class GameService {
             x: j,
             y: i,
             color: 'grey',
+            number: tileId,
           });
       }
     }
@@ -91,6 +92,31 @@ export class GameService {
    */
   getGames() {
     return this.db.collection('games').valueChanges();
+  }
+
+  /**
+   * Get the tiles from a game
+   */
+  getGameTiles(gameId) {
+    return this.db.collection('games').doc(gameId)
+    .collection('tiles', ref => ref.orderBy('number')).valueChanges();
+  }
+
+  /**
+   * Get the tiles from a game
+   */
+  public async getActualGameTiles(gameId): Promise<Tile[]> {
+    const tiles: Tile[] = [];
+    for (let i = 0; i < 360; i++) {
+      const iToString = i.toString();
+      const tilesSnapShot = await  this.db.collection('games').doc(gameId)
+        .collection('tiles', ref => ref.orderBy('number')).doc(iToString)
+          .get().toPromise();
+      const tile = createTile(tilesSnapShot.data());
+      tiles.push(tile);
+      console.log(tile);
+    }
+    return tiles;
   }
 
   /**

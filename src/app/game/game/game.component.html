@@ -9,17 +9,19 @@
 <ng-template #waitingMessage let-user class="center">
   Waiting for an opponent to start.
 </ng-template>
-<div id="outPopUp" *ngIf="game; else loading">
-  <mat-grid-list cols="19" rowHeight="1:1">
-    <mat-grid-tile
-      *ngFor="let tile of game.tiles; let i = index;"
-      [colspan]=1
-      [rowspan]=1
-      [style.background]="game.tiles[i].color"
-      >
-      <button (click)="play(i)" mat-button style="width: 20px; height: 20px;"></button>
-    </mat-grid-tile>
-  </mat-grid-list>
+<div *ngIf="(tiles$ | async) as tiles">
+  <div id="outPopUp" *ngIf="game; else loading">
+    <mat-grid-list cols="19" rowHeight="1:1">
+      <mat-grid-tile
+        *ngFor="let tile of tiles; let i = index;"
+        [colspan]=1
+        [rowspan]=1
+        [style.background]="tiles[i].color"
+        >
+        <button (click)="play(i)" mat-button style="width: 20px; height: 20px;"></button>
+      </mat-grid-tile>
+    </mat-grid-list>
+  </div>
 </div>
 <ng-template #loading let-user>Waiting...</ng-template>
 <button (click)="goBack()">go back</button>

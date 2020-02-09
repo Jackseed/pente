@@ -3,7 +3,8 @@ import { GameService } from '../game.service';
 import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 import { Game, Tile, Player } from '../game.model';
-import { Subscription } from 'rxjs';
+import { Subscription, Observable } from 'rxjs';
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-game',
@@ -13,7 +14,8 @@ import { Subscription } from 'rxjs';
 export class GameComponent implements OnInit {
   game: Game;
   sub: Subscription;
-  tiles: Tile[] = [];
+  actualTiles: Tile[];
+  tiles$: Observable<Tile[]>;
   whitePlayer: Player;
   blackPlayer: Player;
   activePlayer: 'white' | 'black' = 'white';
@@ -23,6 +25,7 @@ export class GameComponent implements OnInit {
   neighbour3: number;
   neighbour4: number;
   victory = false;
+  gameId: string;
 
   constructor(
     private route: ActivatedRoute,
@@ -31,13 +34,15 @@ export class GameComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.gameId = this.route.snapshot.paramMap.get('id');
     this.getGame();
+    this.tiles$ = this.gameService.getGameTiles(this.gameId);
   }
 
   private async getGame() {
     const id = this.route.snapshot.paramMap.get('id');
     this.game = await this.gameService.getGame(id);
-    console.log(this.game.tiles);
+    this.actualTiles = await this.gameService.getActualGameTiles(id);
     this.whitePlayer = this.game.players[0];
     this.blackPlayer = this.game.players[1];
     console.log(this.game.players, this.whitePlayer, this.blackPlayer);
@@ -156,10 +161,12 @@ export class GameComponent implements OnInit {
   }
 
 
-  play(i: number) {
-    if (this.game.tiles[i].color !== 'grey' || this.victory || (this.blackPlayer === undefined)) {
+  private async play(i: number) {
+    this.actualTiles = await this.gameService.getActualGameTiles(this.game.id);
+    if (this.tiles$[i].color !== 'grey' || this.victory || (this.blackPlayer === undefined)) {
       return;
     } else {
+
       this.gameService.updateTile(this.game.id, i, this.activePlayer);
       this.checkCapture(i);
       this.checkVictory(i);
