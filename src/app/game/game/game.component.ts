@@ -163,19 +163,22 @@ export class GameComponent implements OnInit {
 
   private async play(i: number) {
     this.actualTiles = await this.gameService.getActualGameTiles(this.game.id);
-    if (this.actualTiles[i].color !== 'grey' || this.victory || (this.blackPlayer === undefined)) {
+    if (this.actualTiles[i].color !== 'grey' || (this.blackPlayer === undefined)) {
+      console.log(this.activePlayer);
       return;
     } else {
-      console.log(this.actualTiles);
+      console.log(this.actualTiles, this.activePlayer);
       this.gameService.updateTile(this.game.id, i, this.activePlayer);
       this.checkCapture(i);
       this.checkVictory(i);
       if (this.activePlayer === 'black') {
         this.activePlayer = 'white';
         this.passivePlayer = 'black';
+        console.log(this.activePlayer, 'active player should be white');
       } else {
         this.activePlayer = 'black';
         this.passivePlayer = 'white';
+        console.log(this.activePlayer, 'active player should be black');
       }
     }
   }
