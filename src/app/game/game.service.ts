@@ -66,7 +66,7 @@ export class GameService {
     return this.db
       .collection('games')
       .doc(gameId)
-      .update({ player });
+      .update({ players: firebase.firestore.FieldValue.arrayUnion(player) });
   }
 
   /**
@@ -112,6 +112,6 @@ export class GameService {
       scoreVictory: 0
     } as Player;
     this.addPlayer(game.id, player);
-    this.router.navigate(['/game/{{game.id}}']);
+    this.router.navigate([`/games/${game.id}`]);
   }
 }

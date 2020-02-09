@@ -1,9 +1,15 @@
 <p>game-list works!</p>
 
 <div *ngIf="(games$ | async) as games">
-<div *ngFor="let game of games" (click)="joinGame(game)">
-  {{game.id}}
-</div>
+  <div *ngFor="let game of games">
+    <button
+      mat-button
+      color='primary'
+      (click)='joinGame(game)'
+    >
+      {{game.id}}
+    </button>
+  </div>
 </div>
 <button
   mat-button
