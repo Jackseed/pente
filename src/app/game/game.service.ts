@@ -24,16 +24,7 @@ export class GameService {
   async createNewGame() {
     const id = this.db.createId();
     const user = await this.afAuth.auth.currentUser;
-    const tiles: Tile[] = [];
-    for (let i = 0; i < 19; i++) {
-      for (let j = 0; j < 19; j++) {
-        tiles.push({
-          x: j,
-          y: i,
-          color: 'grey',
-        });
-      }
-    }
+
     const players: Player[] = [{
       userId: user.uid,
       isActive: false,
@@ -44,8 +35,22 @@ export class GameService {
     this.db.collection('games').doc(id).set({
       id,
       players,
-      tiles,
     });
+    // Creating tiles:
+    for (let i = 0; i < 19; i++) {
+      for (let j = 0; j < 19; j++) {
+          let tileId = 0;
+          tileId = (tileId + j + 19 *  +i + j);
+          const tileIdToString = tileId.toString();
+          console.log(tileId, tileIdToString);
+          this.db.collection('games').doc(id)
+          .collection('tiles').doc(tileIdToString).set({
+            x: j,
+            y: i,
+            color: 'grey',
+          });
+      }
+    }
     return id;
   }
 
@@ -114,4 +119,15 @@ export class GameService {
     this.addPlayer(game.id, player);
     this.router.navigate([`/games/${game.id}`]);
   }
+
+  /**
+   * Update a tile
+   */
+  updateTile(gameId: string, i: number, color: 'black' | 'white') {
+    const iToString = i.toString();
+    console.log('updating tile', i, 'with', color);
+    return this.db.collection('games').doc(gameId)
+    .collection('tiles').doc(iToString).update({color});
+  }
+
 }

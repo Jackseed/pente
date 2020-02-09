@@ -160,7 +160,7 @@ export class GameComponent implements OnInit {
     if (this.game.tiles[i].color !== 'grey' || this.victory || (this.blackPlayer === undefined)) {
       return;
     } else {
-      this.game.tiles[i].color = this.activePlayer;
+      this.gameService.updateTile(this.game.id, i, this.activePlayer);
       this.checkCapture(i);
       this.checkVictory(i);
       if (this.activePlayer === 'black') {
