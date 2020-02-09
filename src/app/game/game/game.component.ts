@@ -16,8 +16,8 @@ export class GameComponent implements OnInit {
   tiles: Tile[] = [];
   whitePlayer: Player;
   blackPlayer: Player;
-  activePlayer = 'black';
-  passivePlayer = 'white';
+  activePlayer: 'white' | 'black' = 'white';
+  passivePlayer: 'white' | 'black' = 'black';
   neighbour1: number;
   neighbour2: number;
   neighbour3: number;
@@ -37,8 +37,10 @@ export class GameComponent implements OnInit {
   private async getGame() {
     const id = this.route.snapshot.paramMap.get('id');
     this.game = await this.gameService.getGame(id);
+    console.log(this.game.tiles);
     this.whitePlayer = this.game.players[0];
-    console.log(this.whitePlayer, this.blackPlayer);
+    this.blackPlayer = this.game.players[1];
+    console.log(this.game.players, this.whitePlayer, this.blackPlayer);
   }
 
   goBack(): void {
@@ -65,13 +67,13 @@ export class GameComponent implements OnInit {
               (this.neighbour1 >= 0 && this.neighbour1 < 361)
               && (this.neighbour2 >= 0 && this.neighbour2 < 361)
               && (this.neighbour3 >= 0 && this.neighbour3 < 361)
-              && this.game.tiles[i][this.neighbour1].color === this.passivePlayer
-              && this.game.tiles[i][this.neighbour2].color === this.passivePlayer
-              && this.game.tiles[i][this.neighbour3].color === this.activePlayer
+              && this.game.tiles[this.neighbour1].color === this.passivePlayer
+              && this.game.tiles[this.neighbour2].color === this.passivePlayer
+              && this.game.tiles[this.neighbour3].color === this.activePlayer
               ) {
                 // capture of the tiles
-                this.game.tiles[i][this.neighbour1].color = 'grey';
-                this.game.tiles[i][this.neighbour2].color = 'grey';
+                this.game.tiles[this.neighbour1].color = 'grey';
+                this.game.tiles[this.neighbour2].color = 'grey';
                 if (this.activePlayer === 'black') {
                   this.blackPlayer.scoreCapture = this.blackPlayer.scoreCapture + 2;
                 } else {
@@ -158,7 +160,7 @@ export class GameComponent implements OnInit {
     if (this.game.tiles[i].color !== 'grey' || this.victory || (this.blackPlayer === undefined)) {
       return;
     } else {
-      this.game.tiles[i].color = this.game.players[0].color;
+      this.game.tiles[i].color = this.activePlayer;
       this.checkCapture(i);
       this.checkVictory(i);
       if (this.activePlayer === 'black') {
