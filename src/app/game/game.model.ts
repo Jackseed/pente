@@ -40,3 +40,15 @@ export function createTile(params: Partial<Tile> = {}): Tile {
     ...params
   };
 }
+
+/** A factory function that creates Player */
+export function createPlayer(params: Partial<Player> = {}): Player {
+  return {
+    userId: params.userId,
+    isActive: false,
+    color: params.color,
+    scoreCapture: 0,
+    scoreVictory: 0,
+    ...params
+  };
+}

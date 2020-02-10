@@ -1,26 +1,44 @@
 
 <div *ngIf="victory" class="center">
-  <h2>Victory for {{passivePlayer}}</h2>
+  <h2>Victory</h2>
 </div>
-<div class="center" *ngIf="blackPlayer; else waitingMessage">
-  <h2>Score: Black: {{blackPlayer.scoreVictory}} | White: {{whitePlayer.scoreVictory}}</h2>
-  <h2>Captures: Black: {{blackPlayer.scoreCapture}} | White: {{whitePlayer.scoreCapture}}</h2>
-</div>
-<ng-template #waitingMessage let-user class="center">
-  Waiting for an opponent to start.
-</ng-template>
-<div *ngIf="(tiles$ | async) as tiles">
-  <div id="outPopUp" *ngIf="game; else loading">
-    <mat-grid-list cols="19" rowHeight="1:1">
-      <mat-grid-tile
-        *ngFor="let tile of tiles; let i = index;"
-        [colspan]=1
-        [rowspan]=1
-        [style.background]="tiles[i].color"
-        >
-        <button (click)="play(i)" mat-button style="width: 20px; height: 20px;"></button>
-      </mat-grid-tile>
-    </mat-grid-list>
+
+<div *ngIf="(user$ | async) as user">
+  <div *ngIf="(tiles$ | async) as tiles">
+    <div *ngIf="(players$ | async) as players">
+
+      <div *ngIf="players.length > 1; else waitingMessage">
+        <h1 class="center">Let's play!</h1>
+        <span>
+          Player 1:
+          UserId: {{players[0].userId}}
+          Color: {{players[0].color}}
+          Score: {{players[0].scoreVictory}}
+          Capture: {{players[0].scoreCapture}}
+        </span>
+        <span>
+          Player 2: {{players[1].userId}}
+          Color: {{players[1].color}}
+          Score: {{players[1].scoreVictory}}
+          Capture: {{players[1].scoreCapture}}
+        </span>
+      </div>
+      <ng-template #waitingMessage let-user class="center">
+        Waiting for an opponent to start.
+      </ng-template>
+
+    <div id="outPopUp" *ngIf="game; else loading">
+      <mat-grid-list cols="19" rowHeight="1:1">
+        <mat-grid-tile
+          *ngFor="let tile of tiles; let i = index;"
+          [colspan]=1
+          [rowspan]=1
+          [style.background]="tiles[i].color"
+          >
+          <button (click)="play(i, user.uid)" mat-button style="width: 20px; height: 20px;"></button>
+        </mat-grid-tile>
+      </mat-grid-list>
+    </div>
   </div>
 </div>
 <ng-template #loading let-user>Waiting...</ng-template>

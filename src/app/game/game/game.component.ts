@@ -3,8 +3,9 @@ import { GameService } from '../game.service';
 import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 import { Game, Tile, Player } from '../game.model';
-import { Subscription, Observable } from 'rxjs';
-import { take } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { AuthService } from 'src/app/auth/auth.service';
+import { User } from 'src/app/auth/user.model';
 
 @Component({
   selector: 'app-game',
@@ -13,13 +14,13 @@ import { take } from 'rxjs/operators';
 })
 export class GameComponent implements OnInit {
   game: Game;
-  sub: Subscription;
+  user$: Observable<User>;
   actualTiles: Tile[];
   tiles$: Observable<Tile[]>;
-  whitePlayer: Player;
-  blackPlayer: Player;
-  activePlayer: 'white' | 'black' = 'white';
-  passivePlayer: 'white' | 'black' = 'black';
+  player: Player;
+  passivePlayer: Player;
+  players: Player[];
+  players$: Observable<Player[]>;
   neighbour1: number;
   neighbour2: number;
   neighbour3: number;
@@ -31,21 +32,19 @@ export class GameComponent implements OnInit {
     private route: ActivatedRoute,
     private gameService: GameService,
     private location: Location,
+    private afAuth: AuthService,
   ) {}
 
   ngOnInit() {
+    this.user$ = this.afAuth.user$;
     this.gameId = this.route.snapshot.paramMap.get('id');
     this.getGame();
     this.tiles$ = this.gameService.getGameTiles(this.gameId);
+    this.players$ = this.gameService.getPlayers$(this.gameId);
   }
 
   private async getGame() {
-    const id = this.route.snapshot.paramMap.get('id');
-    this.game = await this.gameService.getGame(id);
-    this.actualTiles = await this.gameService.getActualGameTiles(id);
-    this.whitePlayer = this.game.players[0];
-    this.blackPlayer = this.game.players[1];
-    console.log(this.game.players, this.whitePlayer, this.blackPlayer);
+    this.game = await this.gameService.getGame(this.gameId);
   }
 
   goBack(): void {
@@ -72,18 +71,14 @@ export class GameComponent implements OnInit {
               (this.neighbour1 >= 0 && this.neighbour1 < 361)
               && (this.neighbour2 >= 0 && this.neighbour2 < 361)
               && (this.neighbour3 >= 0 && this.neighbour3 < 361)
-              && this.actualTiles[this.neighbour1].color === this.passivePlayer
-              && this.actualTiles[this.neighbour2].color === this.passivePlayer
-              && this.actualTiles[this.neighbour3].color === this.activePlayer
+              && this.actualTiles[this.neighbour1].color === this.passivePlayer.color
+              && this.actualTiles[this.neighbour2].color === this.passivePlayer.color
+              && this.actualTiles[this.neighbour3].color === this.player.color
               ) {
                 // capture of the tiles
-                this.actualTiles[this.neighbour1].color = 'grey';
-                this.actualTiles[this.neighbour2].color = 'grey';
-                if (this.activePlayer === 'black') {
-                  this.blackPlayer.scoreCapture = this.blackPlayer.scoreCapture + 2;
-                } else {
-                  this.whitePlayer.scoreCapture = this.whitePlayer.scoreCapture + 2;
-                }
+                this.gameService.updateTile(this.game.id, this.neighbour1, 'grey');
+                this.gameService.updateTile(this.game.id, this.neighbour2, 'grey');
+                this.player.scoreCapture += 2;
             }
         } else {
           return;
@@ -115,14 +110,10 @@ export class GameComponent implements OnInit {
     let ny: number;
     let counter: number;
 
-    if (this.whitePlayer.scoreCapture === 10 || this.blackPlayer.scoreCapture === 10) {
+    if (this.player.scoreCapture === 10) {
       this.victory = true;
-      console.log('Victory for '.concat(this.activePlayer));
-      if (this.whitePlayer.color === this.activePlayer) {
-        this.whitePlayer.scoreVictory++;
-      } else {
-        this.blackPlayer.scoreVictory++;
-      }
+      console.log('Victory for '.concat(this.player.color));
+      this.player.scoreVictory ++;
     }
 
     for (x = -1; x <= 1; x++) {
@@ -148,12 +139,8 @@ export class GameComponent implements OnInit {
           }
           if (counter >= 7) {
             this.victory = true;
-            console.log('Victory for '.concat(this.activePlayer));
-            if (this.whitePlayer.color === this.activePlayer) {
-              this.whitePlayer.scoreVictory++;
-            } else {
-              this.blackPlayer.scoreVictory++;
-            }
+            console.log('Victory for '.concat(this.player.color));
+            this.player.scoreVictory++;
           }
         }
       }
@@ -161,24 +148,34 @@ export class GameComponent implements OnInit {
   }
 
 
-  private async play(i: number) {
+
+  private async play(i: number, userId: string) {
+    // call the board tiles
     this.actualTiles = await this.gameService.getActualGameTiles(this.game.id);
-    if (this.actualTiles[i].color !== 'grey' || (this.blackPlayer === undefined)) {
-      console.log(this.activePlayer);
+    // call the players
+    this.players = await this.gameService.getPlayers(this.gameId);
+    // call the player who played
+    this.player = await this.gameService.getPlayer(this.game.id, userId);
+    console.log(this.player);
+    if (this.players.length < 2) {
+      console.log('not enough players, wait for a friend');
       return;
     } else {
-      console.log(this.actualTiles, this.activePlayer);
-      this.gameService.updateTile(this.game.id, i, this.activePlayer);
-      this.checkCapture(i);
-      this.checkVictory(i);
-      if (this.activePlayer === 'black') {
-        this.activePlayer = 'white';
-        this.passivePlayer = 'black';
-        console.log(this.activePlayer, 'active player should be white');
+      if (!this.player.isActive) {
+        console.log('not your turn');
       } else {
-        this.activePlayer = 'black';
-        this.passivePlayer = 'white';
-        console.log(this.activePlayer, 'active player should be black');
+        if (this.actualTiles[i].color !== 'grey') {
+          console.log('not an authorized play');
+          return;
+        } else {
+          // call the passive player
+          this.passivePlayer = await this.gameService.getPassivePlayer(this.game.id);
+          console.log('passive player is', this.passivePlayer);
+          this.gameService.updateTile(this.game.id, i, this.player.color);
+          this.checkCapture(i);
+          this.checkVictory(i);
+          this.gameService.changeActivePlayer(this.gameId, this.players);
+        }
       }
     }
   }
