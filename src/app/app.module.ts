@@ -15,6 +15,7 @@ import { AuthGuard } from './auth/auth.guard';
 import { MatIconModule } from '@angular/material/icon';
 import { GameModule } from './game/game.module';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { MatCardModule } from '@angular/material/card';
 
 const firebaseConfig = {
   apiKey: 'AIzaSyD8cItYsuOobtu8nsJBQU6_bQWEmQFaiv0',
@@ -44,7 +45,8 @@ const firebaseConfig = {
     AngularFireAuthModule,
     MatIconModule,
     GameModule,
-    FlexLayoutModule
+    FlexLayoutModule,
+    MatCardModule
   ],
   providers: [AuthGuard],
   bootstrap: [AppComponent],

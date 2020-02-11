@@ -8,7 +8,7 @@ import { GameListComponent } from './game-list/game-list.component';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatButtonModule } from '@angular/material/button';
 import { FlexLayoutModule } from '@angular/flex-layout';
-
+import {MatCardModule} from '@angular/material/card';
 @NgModule({
   declarations: [CreateButtonComponent, GameComponent, GameListComponent],
   imports: [
@@ -17,7 +17,8 @@ import { FlexLayoutModule } from '@angular/flex-layout';
     MatIconModule,
     MatGridListModule,
     MatButtonModule,
-    FlexLayoutModule
+    FlexLayoutModule,
+    MatCardModule
   ]
 })
 export class GameModule { }

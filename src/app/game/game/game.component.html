@@ -11,31 +11,27 @@
 
       <ng-template #waitingMessage let-user>
         <div fxLayout="row" fxLayoutAlign="center center" class="center" style="padding-top:2%">
-          <h1 fxFlex="50%">Waiting for an opponent to start</h1>
+          <h1>Waiting for an opponent to start</h1>
         </div>
       </ng-template>
 
       <div *ngIf="players.length > 1; else waitingMessage">
-        <h1 class="center">Let's play!</h1>
-        <span>
-          Player 1:
-          UserId: {{players[0].userId}}
-          Color: {{players[0].color}}
-          Score: {{players[0].scoreVictory}}
-          Capture: {{players[0].scoreCapture}}
-        </span>
-        <span>
-          Player 2: {{players[1].userId}}
-          Color: {{players[1].color}}
-          Score: {{players[1].scoreVictory}}
-          Capture: {{players[1].scoreCapture}}
-        </span>
-      </div>
-
+        <div fxLayout="row" fxLayoutAlign="center center" class="center" style="padding-top:2%">
+          <h1>Let's play!</h1>
+        </div>
 
       <div *ngIf="game; else loading">
-        <div fxLayout="row" fxLayoutAlign="center center" style="padding-top:4%">
-          <div fxFlex="35%">
+        <div fxLayout="row" fxLayoutAlign="space-around" style="padding-top:4%" fxLayoutGap="10">
+          <div fxFlex="20" style="padding-top:5%">
+            <mat-card>
+            <mat-card-header>
+              <mat-card-title>BLACK</mat-card-title>
+              <mat-card-subtitle>You</mat-card-subtitle>
+              <mat-card-subtitle>Capture: {{players[0].scoreCapture}}</mat-card-subtitle>
+            </mat-card-header>
+          </mat-card>
+        </div>
+          <div fxFlex="35">
             <mat-grid-list cols="19" rowHeight="1:1">
               <mat-grid-tile
                 *ngFor="let tile of tiles; let i = index;"
@@ -47,6 +43,15 @@
               </mat-grid-tile>
             </mat-grid-list>
           </div>
+          <div fxFlex="20" style="padding-top:5%">
+            <mat-card>
+            <mat-card-header>
+              <mat-card-title>WHITE</mat-card-title>
+              <mat-card-subtitle>Your opponent</mat-card-subtitle>
+              <mat-card-subtitle>Capture: {{players[1].scoreCapture}}</mat-card-subtitle>
+            </mat-card-header>
+          </mat-card>
+        </div>
           </div>
         <div fxLayout="row" fxLayoutAlign="center center" style="padding-top:2%">
             <button (click)="goBack()">Back</button>
@@ -54,6 +59,7 @@
       </div>
     </div>
   </div>
+</div>
 </div>
 
 
