@@ -10,7 +10,7 @@ import { GameListComponent } from './game/game-list/game-list.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
-  { path: 'play', component: TileComponent,  canActivate: [AuthGuard] },
+  { path: 'play', component: TileComponent },
   { path: 'games', component: GameListComponent, canActivate: [AuthGuard] },
   {
     path: 'game',
