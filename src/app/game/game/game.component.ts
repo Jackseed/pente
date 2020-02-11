@@ -149,7 +149,7 @@ export class GameComponent implements OnInit {
 
 
 
-  private async play(i: number, userId: string) {
+  public async play(i: number, userId: string) {
     // call the board tiles
     this.actualTiles = await this.gameService.getActualGameTiles(this.game.id);
     // call the players

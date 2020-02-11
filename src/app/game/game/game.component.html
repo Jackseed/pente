@@ -1,11 +1,19 @@
 
-<div *ngIf="victory" class="center">
-  <h2>Victory</h2>
-</div>
-
 <div *ngIf="(user$ | async) as user">
   <div *ngIf="(tiles$ | async) as tiles">
     <div *ngIf="(players$ | async) as players">
+
+      <div *ngIf="victory" class="center">
+        <h2>Victory</h2>
+      </div>
+
+      <ng-template #loading let-user>Waiting...</ng-template>
+
+      <ng-template #waitingMessage let-user>
+        <div fxLayout="row" fxLayoutAlign="center center" class="center" style="padding-top:2%">
+          <h1 fxFlex="50%">Waiting for an opponent to start</h1>
+        </div>
+      </ng-template>
 
       <div *ngIf="players.length > 1; else waitingMessage">
         <h1 class="center">Let's play!</h1>
@@ -23,23 +31,29 @@
           Capture: {{players[1].scoreCapture}}
         </span>
       </div>
-      <ng-template #waitingMessage let-user class="center">
-        Waiting for an opponent to start.
-      </ng-template>
 
-    <div id="outPopUp" *ngIf="game; else loading">
-      <mat-grid-list cols="19" rowHeight="1:1">
-        <mat-grid-tile
-          *ngFor="let tile of tiles; let i = index;"
-          [colspan]=1
-          [rowspan]=1
-          [style.background]="tiles[i].color"
-          >
-          <button (click)="play(i, user.uid)" mat-button style="width: 20px; height: 20px;"></button>
-        </mat-grid-tile>
-      </mat-grid-list>
+
+      <div *ngIf="game; else loading">
+        <div fxLayout="row" fxLayoutAlign="center center" style="padding-top:4%">
+          <div fxFlex="35%">
+            <mat-grid-list cols="19" rowHeight="1:1">
+              <mat-grid-tile
+                *ngFor="let tile of tiles; let i = index;"
+                [colspan]=1
+                [rowspan]=1
+                [style.background]="tiles[i].color"
+                >
+                <button (click)="play(i, user.uid)" mat-button style="width: 20px; height: 20px;"></button>
+              </mat-grid-tile>
+            </mat-grid-list>
+          </div>
+          </div>
+        <div fxLayout="row" fxLayoutAlign="center center" style="padding-top:2%">
+            <button (click)="goBack()">Back</button>
+          </div>
+      </div>
     </div>
   </div>
 </div>
-<ng-template #loading let-user>Waiting...</ng-template>
-<button (click)="goBack()">go back</button>
+
+

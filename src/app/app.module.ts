@@ -1,19 +1,20 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import {MatGridListModule} from '@angular/material/grid-list';
+import { MatGridListModule } from '@angular/material/grid-list';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { TileComponent } from './tile/tile.component';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import {MatButtonModule} from '@angular/material/button';
+import { MatButtonModule } from '@angular/material/button';
 import { AngularFireModule } from '@angular/fire';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { UserProfileComponent } from './user-profile/user-profile.component';
 import { LoginComponent } from './login/login.component';
 import { AuthGuard } from './auth/auth.guard';
-import {MatIconModule} from '@angular/material/icon';
+import { MatIconModule } from '@angular/material/icon';
 import { GameModule } from './game/game.module';
+import { FlexLayoutModule } from '@angular/flex-layout';
 
 const firebaseConfig = {
   apiKey: 'AIzaSyD8cItYsuOobtu8nsJBQU6_bQWEmQFaiv0',
@@ -43,6 +44,7 @@ const firebaseConfig = {
     AngularFireAuthModule,
     MatIconModule,
     GameModule,
+    FlexLayoutModule
   ],
   providers: [AuthGuard],
   bootstrap: [AppComponent],
