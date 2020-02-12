@@ -16,13 +16,16 @@
       </ng-template>
 
       <div *ngIf="players.length > 1; else waitingMessage">
-        <div fxLayout="row" fxLayoutAlign="center center" class="center" style="padding-top:2%">
-          <h1>Let's play!</h1>
+        <div fxLayout="row" fxLayoutAlign="center" id="score"  fxFlexAlign="auto" style="padding-top:3%">
+          0 - 0
+        </div>
+        <div fxLayout="row" fxLayoutAlign="center" id="turns" style="padding-top:5%">
+          Your turn
         </div>
 
       <div *ngIf="game; else loading">
         <div fxLayout="row" fxLayoutAlign="space-around" style="padding-top:4%" fxLayoutGap="10">
-          <div fxFlex="20" style="padding-top:5%">
+          <div fxFlex="20" style="padding-top:7%">
             <mat-card>
             <mat-card-header>
               <mat-card-title>BLACK</mat-card-title>
@@ -43,7 +46,7 @@
               </mat-grid-tile>
             </mat-grid-list>
           </div>
-          <div fxFlex="20" style="padding-top:5%">
+          <div fxFlex="20" style="padding-top:7%">
             <mat-card>
             <mat-card-header>
               <mat-card-title>WHITE</mat-card-title>
