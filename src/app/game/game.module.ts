@@ -9,8 +9,17 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { MatButtonModule } from '@angular/material/button';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import {MatCardModule} from '@angular/material/card';
+import { GameFormComponent } from './game-form/game-form.component';
+import { FormsModule } from '@angular/forms';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatInputModule} from '@angular/material/input';
+
 @NgModule({
-  declarations: [CreateButtonComponent, GameComponent, GameListComponent],
+  declarations: [
+    CreateButtonComponent,
+    GameComponent,
+    GameListComponent,
+    GameFormComponent],
   imports: [
     CommonModule,
     GameRoutingModule,
@@ -18,7 +27,10 @@ import {MatCardModule} from '@angular/material/card';
     MatGridListModule,
     MatButtonModule,
     FlexLayoutModule,
-    MatCardModule
+    MatCardModule,
+    FormsModule,
+    MatFormFieldModule,
+    MatInputModule
   ]
 })
 export class GameModule { }

@@ -21,12 +21,6 @@ export class GameListComponent implements OnInit {
     this.games$ = this.gameService.getGames();
   }
 
-  async createNewGame() {
-    const gameId = await this.gameService.createNewGame();
-    console.log(gameId);
-    this.router.navigate([`/games/${gameId}`]);
-  }
-
   joinGame(game) {
     this.gameService.joinGame(game);
   }

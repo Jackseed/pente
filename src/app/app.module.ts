@@ -16,6 +16,10 @@ import { MatIconModule } from '@angular/material/icon';
 import { GameModule } from './game/game.module';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatCardModule } from '@angular/material/card';
+import { FormsModule } from '@angular/forms';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatInputModule} from '@angular/material/input';
+
 
 const firebaseConfig = {
   apiKey: 'AIzaSyD8cItYsuOobtu8nsJBQU6_bQWEmQFaiv0',
@@ -32,7 +36,7 @@ const firebaseConfig = {
     AppComponent,
     TileComponent,
     UserProfileComponent,
-    LoginComponent
+    LoginComponent,
   ],
   imports: [
     BrowserModule,
@@ -46,7 +50,10 @@ const firebaseConfig = {
     MatIconModule,
     GameModule,
     FlexLayoutModule,
-    MatCardModule
+    MatCardModule,
+    FormsModule,
+    MatFormFieldModule,
+    MatInputModule,
   ],
   providers: [AuthGuard],
   bootstrap: [AppComponent],
