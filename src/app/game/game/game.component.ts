@@ -7,6 +7,7 @@ import { Observable } from 'rxjs';
 import { AuthService } from 'src/app/auth/auth.service';
 import { User } from 'src/app/auth/user.model';
 
+
 @Component({
   selector: 'app-game',
   templateUrl: './game.component.html',
@@ -41,6 +42,7 @@ export class GameComponent implements OnInit {
     this.getGame();
     this.tiles$ = this.gameService.getGameTiles(this.gameId);
     this.players$ = this.gameService.getPlayers$(this.gameId);
+    console.log(this.victory);
   }
 
   private async getGame() {
