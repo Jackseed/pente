@@ -89,7 +89,7 @@ export class GameService {
   /**
    * Get Observable players from a game
    */
-  getPlayers$(gameId) {
+  getPlayers$(gameId: string): Observable<Player[]> {
     return this.db.collection('games').doc(gameId)
       .collection('players').valueChanges();
   }
@@ -97,7 +97,7 @@ export class GameService {
   /**
    * Get players from a game
    */
-  public async getPlayers(gameId): Promise<Player[]> {
+  public async getPlayers(gameId: string): Promise<Player[]> {
     const players: Player[] = [];
     await this.db.collection('games').doc(gameId)
       .collection('players')
