@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
 import * as firebase from 'firebase/app';
-import { switchMap } from 'rxjs/operators';
 import { Tile, Player, Game, createGame, createTile, createPlayer } from './game.model';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs/internal/Observable';
@@ -21,7 +20,7 @@ export class GameService {
   /**
    * Creates a new game for the current user
    */
-  async createNewGame() {
+  async createNewGame(name) {
     const id = this.db.createId();
     const user = await this.afAuth.auth.currentUser;
     const firstPlayer: Player = createPlayer({
@@ -30,7 +29,7 @@ export class GameService {
       isActive: true,
     });
     // Create the game
-    this.db.collection('games').doc(id).set({id});
+    this.db.collection('games').doc(id).set({id, name});
     // Create the tiles:
     for (let i = 0; i < 19; i++) {
       for (let j = 0; j < 19; j++) {

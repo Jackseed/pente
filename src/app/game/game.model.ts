@@ -24,8 +24,6 @@ export function createGame(params: Partial<Game> = {}): Game {
   return {
     id: params.id,
     name: params.name,
-    tiles: params.tiles,
-    players: params.players,
     ...params
   };
 }
