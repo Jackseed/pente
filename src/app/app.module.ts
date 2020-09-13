@@ -22,13 +22,13 @@ import {MatInputModule} from '@angular/material/input';
 
 
 const firebaseConfig = {
-  apiKey: 'AIzaSyD8cItYsuOobtu8nsJBQU6_bQWEmQFaiv0',
-  authDomain: 'pente-acbb0.firebaseapp.com',
-  databaseURL: 'https://pente-acbb0.firebaseio.com',
-  projectId: 'pente-acbb0',
-  storageBucket: 'pente-acbb0.appspot.com',
-  messagingSenderId: '63745554532',
-  appId: '1:63745554532:web:15cbcc90af48d16273c771'
+  apiKey: "AIzaSyAoX1s0E-K7rJcawJCcR4uUdGAmTHuae54",
+  authDomain: "pente-game.firebaseapp.com",
+  databaseURL: "https://pente-game.firebaseio.com",
+  projectId: "pente-game",
+  storageBucket: "pente-game.appspot.com",
+  messagingSenderId: "878868981433",
+  appId: "1:878868981433:web:9cc778aeccad2090d0dd68"
 };
 
 @NgModule({
